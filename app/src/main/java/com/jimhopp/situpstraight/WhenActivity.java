@@ -3,11 +3,22 @@ package com.jimhopp.situpstraight;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
 public class WhenActivity extends Activity {
-    TextView mStartTime;
+    EditText mStartTimeView, mEndTimeView;
+    CheckBox mEnabledView;
+
+    boolean mEnabled;
+    String mStartTimeStr, mEndTimeStr;
+
+    public static final String TYPE = "NUDGE_ME";
 
     /**
      * Called when the activity is starting.  This is where most initialization
@@ -38,7 +49,41 @@ public class WhenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        mStartTime = (TextView) findViewById(R.id.startTime);
+
+        mStartTimeView = (EditText) findViewById(R.id.startTime);
+        mStartTimeView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Log.d(TYPE, "onEditorAction got " + actionId + " for "
+                        + (event == null ? "(null event)" : event.toString()));
+                mStartTimeStr = mStartTimeView.getText().toString();
+                Log.d(TYPE, "onEditorAction: start time=" + mStartTimeStr);
+                return false;
+            }
+        });
+
+        mEndTimeView = (EditText) findViewById(R.id.endTime);
+        mEndTimeView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                Log.d(TYPE, "onEditorAction got " + actionId + " for "
+                        + (event == null ? "(null event)" : event.toString()));
+                mEndTimeStr = mEndTimeView.getText().toString();
+                Log.d(TYPE, "onEditorAction: end time=" + mEndTimeStr);
+                return false;
+            }
+        });
+
+        mEnabledView = (CheckBox) findViewById(R.id.enabled);
+        mEnabledView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.d(TYPE, "onCheckedChanged; isChecked= " + isChecked);
+                mEnabled = isChecked;
+                mStartTimeView.setEnabled(mEnabled);
+                mEndTimeView.setEnabled(mEnabled);
+            }
+        });
     }
 
     public static int squareMe(int a) { return a * a;}
