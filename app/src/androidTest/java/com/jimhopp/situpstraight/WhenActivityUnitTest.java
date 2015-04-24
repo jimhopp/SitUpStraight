@@ -63,6 +63,10 @@ public class WhenActivityUnitTest extends ActivityUnitTestCase<WhenActivity> {
         assertEquals(13, WhenActivity.TimePickerFragment.parseHour("1:59PM"));
     }
 
+    public void testHourTrailingSpaces() throws ParseException {
+        assertEquals(9, WhenActivity.TimePickerFragment.parseHour("9  :10 AM"));
+
+    }
     public void testHourNull() {
         try {
             assertEquals(1, WhenActivity.TimePickerFragment.parseHour(null));
@@ -116,6 +120,10 @@ public class WhenActivityUnitTest extends ActivityUnitTestCase<WhenActivity> {
 
     public void testMinuteNoLeadingZero() throws ParseException {
         assertEquals(1, WhenActivity.TimePickerFragment.parseMinute("03:1"));
+    }
+
+    public void testMinuteTrailingSpaces() throws ParseException {
+        assertEquals(10, WhenActivity.TimePickerFragment.parseMinute("9:10 AM"));
     }
 
     public void testMinuteAM() throws ParseException {

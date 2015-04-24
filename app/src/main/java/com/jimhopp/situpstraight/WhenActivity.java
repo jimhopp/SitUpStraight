@@ -70,9 +70,11 @@ public class WhenActivity extends Activity {
             try {
                 hour = parseHour(tv.getText().toString());
                 minute = parseMinute(tv.getText().toString());
+                cal.set(Calendar.HOUR_OF_DAY, hour);
+                cal.set(Calendar.MINUTE, minute);
             } catch (ParseException e) {
-                Log.d(TYPE, "unable to parse " + tv.getText().toString() +
-                            " because " + e.toString());
+                Log.d(TYPE, "unable to parse '" + tv.getText().toString() +
+                            "' because " + e.toString());
             }
             hour = cal.get(Calendar.HOUR_OF_DAY);
             minute = cal.get(Calendar.MINUTE);
@@ -90,7 +92,7 @@ public class WhenActivity extends Activity {
 
             int hr;
 
-            try {hr = Integer.parseInt(tm.substring(0,sep));}
+            try {hr = Integer.parseInt(tm.substring(0,sep).trim());}
             catch (NumberFormatException e) {
                 throw new ParseException("unable to parse " + tm, sep);
             }
@@ -121,7 +123,7 @@ public class WhenActivity extends Activity {
             if (am != -1) end = am;
             if (pm != -1) end = pm;
 
-            try {min = Integer.parseInt(tm.substring(sep+1,end));}
+            try {min = Integer.parseInt(tm.substring(sep+1,end).trim());}
             catch (NumberFormatException e) {
                 throw new ParseException("unable to parse " + tm, sep);
             }
