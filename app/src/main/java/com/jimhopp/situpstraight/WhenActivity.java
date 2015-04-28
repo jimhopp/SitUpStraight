@@ -33,13 +33,6 @@ public class WhenActivity extends Activity {
     public static class TimePickerFragment extends DialogFragment
     implements TimePickerDialog.OnTimeSetListener {
         static TextView tv;
-        //TODO: turn into no-arg constructor and use Fragment#setArguments(Bundle) to pass
-        // TextView, and getArguments to retrieve.
-        public TimePickerFragment(TextView f) {
-            super();
-            tv = f;
-            Log.d(TYPE, "new TimePickerFragment: tv=" + tv.toString());
-        }
 
         /**
          * Override to build your own custom Dialog container.  This is typically
@@ -64,7 +57,10 @@ public class WhenActivity extends Activity {
          */
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            //TODO: getArguments(Bundle) to retrieve the TextView
+            Bundle args = getArguments();
+            int tvId = args.getInt("textviewId");
+            tv = (TextView)getActivity().findViewById(tvId);
+            if (tv == null) Log.e(TYPE, "unable to find textview with id " + tvId);
             Calendar cal = Calendar.getInstance();
             int hour, minute;
             try {
@@ -185,7 +181,10 @@ public class WhenActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TYPE, "start time got clicked");
-                DialogFragment tmFrag = new TimePickerFragment(mStartTimeView);
+                Bundle startArgs = new Bundle();
+                startArgs.putInt("textviewId", R.id.startTime);
+                DialogFragment tmFrag = new TimePickerFragment();
+                tmFrag.setArguments(startArgs);
                 tmFrag.show(getFragmentManager(), "starttimepicker");
             }
         });
@@ -200,7 +199,10 @@ public class WhenActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Log.d(TYPE, "end time got clicked");
-                DialogFragment tmFrag = new TimePickerFragment(mEndTimeView);
+                Bundle endArgs = new Bundle();
+                endArgs.putInt("textviewId", R.id.endTime);
+                DialogFragment tmFrag = new TimePickerFragment();
+                tmFrag.setArguments(endArgs);
                 tmFrag.show(getFragmentManager(), "endtimepicker");
             }
         });
